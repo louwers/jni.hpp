@@ -196,9 +196,9 @@ namespace jni
             template < class Peer, class TagType, class = std::enable_if_t< std::is_same<P, Peer>::value > >
             auto operator()(const Field<TagType, jlong>& field)
                {
-                auto wrapper = [field, lambda = lambda] (JNIEnv& env, Object<TagType>& obj, Args... args)
+                auto wrapper = [field, currLambda = lambda] (JNIEnv& env, Object<TagType>& obj, Args... args)
                    {
-                    return lambda(env, *reinterpret_cast<P*>(obj.Get(env, field)), args...);
+                    return currLambda(env, *reinterpret_cast<P*>(obj.Get(env, field)), args...);
                    };
 
                 return MakeNativeMethod(name, wrapper);

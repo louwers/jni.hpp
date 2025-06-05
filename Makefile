@@ -4,13 +4,29 @@ BUILD := build/$(VARIANT)
 COMPILER := $(shell CXX="${CXX}" misc/compiler.sh)
 COMPILER_MAJOR_VERSION := $(shell CXX="${CXX}" misc/compiler-major-version.sh)
 
+COMMON_WARNINGS := \
+    -Wall \
+    -Wextra \
+    -pedantic \
+    -Wno-unused-but-set-variable \
+    -Wno-switch-default \
+    -Wno-cast-function-type
+
 ifeq ($(COMPILER), clang)
-	CXXFLAGS_WARNINGS := -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-exit-time-destructors
-	ifeq ($(shell test $(COMPILER_MAJOR_VERSION) -gt 4; echo $$?),0)
-		CXXFLAGS_WARNINGS += -Wno-unused-template
-	endif
+  CXXFLAGS_WARNINGS := \
+    $(COMMON_WARNINGS) \
+    -Weverything \
+    -Wno-c++98-compat \
+    -Wno-c++98-compat-pedantic \
+    -Wno-exit-time-destructors \
+    -Wno-unused-template \
+    -Wno-poison-system-directories \
+    -Wno-cast-function-type-strict \
+    -Wno-shadow-field \
+    -Wno-reserved-identifier \
+    -Wno-unsafe-buffer-usage
 else ifeq ($(COMPILER), gcc)
-	CXXFLAGS_WARNINGS := -Wall -Wextra -pedantic -Wno-unused-but-set-variable
+  CXXFLAGS_WARNINGS := $(COMMON_WARNINGS)
 endif
 
 CXXFLAGS := $(CXXFLAGS) --std=c++14 -fPIC -Iinclude $(CXXFLAGS_WARNINGS) -Werror

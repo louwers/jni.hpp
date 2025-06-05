@@ -1,0 +1,26 @@
+name: ci
+
+on:
+  push:
+
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    strategy:
+      matrix:
+        compiler: [clang++-16, clang++-17, clang++-18, g++-12, g++-13, g++-14]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build with ${{ matrix.compiler }}
+        env:
+          CXX: ${{ matrix.compiler }}
+        run: |
+          make clean
+          make test examples

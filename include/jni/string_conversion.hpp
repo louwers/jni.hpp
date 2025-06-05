@@ -7,6 +7,9 @@
 #include <locale>
 #include <codecvt>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 namespace jni
    {
     inline std::u16string convertUTF8ToUTF16(const std::string& string)
@@ -19,3 +22,5 @@ namespace jni
         return std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t>().to_bytes(string);
        }
    }
+
+#pragma GCC diagnostic pop
